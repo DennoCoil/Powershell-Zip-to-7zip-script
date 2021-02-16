@@ -1,12 +1,19 @@
-﻿#Use this only for cases of compressing 1 file per 1 archive
+#Use this only for cases of compressing 1 file per 1 archive
 
 $TempFolderPath = ".\TEMPORARYFOLDER\"
+
+$IncludeFiles = @("*.zip", "*.rar")
+
+$ExcludeFiles = @("*.txt", "*.bat", "*.exe", "*.xml", "*.pdf", "*.png", "*.7z", "*.mp4", "*.zip", "*.jpg", "*.wav", "*.wad", "*.csv")
+
+$FoundItem = Get-ChildItem * -Include $IncludeFiles
+
 
 #EXTRACTION
 
 New-Item -Type Directory -Path $TempFolderPath
 
-ForEach ($zippedfile In (Get-ChildItem -Filter $("*.zip" -or "*.rar"))) {
+ForEach ($zippedfile In $FoundItem) {
 
     Expand-7Zip -ArchiveFileName "$($zippedfile.Name)" -TargetPath $TempFolderPath
     Remove-Item $zippedfile
@@ -14,7 +21,7 @@ ForEach ($zippedfile In (Get-ChildItem -Filter $("*.zip" -or "*.rar"))) {
 
 #COMPRESSION
 
-$RomFile = Get-ChildItem -Path $TempFolderPath -Exclude *.txt, *.bat, *.exe, *.xml, *.pdf, *.png, *.7z, *.mp4, *.zip, *.jpg, *.wav, *.wad, *.csv
+$RomFile = Get-ChildItem -Path $TempFolderPath -Exclude $ExcludeFiles
 
 ForEach ($Rom In $RomFile) {
 
@@ -26,4 +33,4 @@ ForEach ($Rom In $RomFile) {
 
 Move-Item -Path $($TempFolderPath + "\*.7z") -Destination ".."
 
-Remove-Item -Path $TempFolderPath
+Remove-Item -Path $TempFolderPath -Recurse
