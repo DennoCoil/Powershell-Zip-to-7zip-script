@@ -24,6 +24,6 @@ ForEach ($Rom In $RomFile) {
     Compress-7Zip -Path $Rom -ArchiveFileName $RomGet -CompressionLevel Ultra -CompressionMethod LZMA2 -Format SevenZip -DisableRecursion
 }
 
-Move-Item -Path $($TempFolderPath + "\*.7z") -Destination ..
+Move-Item -Path $($TempFolderPath + "\*.7z") -Destination ".."
 
 Remove-Item -Path $TempFolderPath
